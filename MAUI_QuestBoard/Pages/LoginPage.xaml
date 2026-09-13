@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
+             x:Class="MAUI_QuestBoard.Pages.LoginPage">
+
+    <ContentPage.BindingContext>
+        <vm:LoginViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <!-- These UI elements are bound to the properties in the LoginViewModel -->
+        <Entry Text="{Binding UserID}" Placeholder="Username" />
+        <Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" />
+        <!-- Button to trigger the login command in the LoginViewModel -->
+        <Button Text="Login" Command="{Binding LoginCommand}" />
+        <Button Text="Continue as Guest" Command="{Binding ContinueAsGuestCommand}" />
+        <Button Text="Create Account" Command="{Binding CreateAccountCommand}" />
+
+        <Label Text="{Binding Message}" TextColor="Red" />
+        
+    </VerticalStackLayout>
+</ContentPage>

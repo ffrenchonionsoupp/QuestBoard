@@ -1,0 +1,26 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
+             x:Class="MAUI_QuestBoard.Pages.AddUserPage">
+
+    <ContentPage.BindingContext>
+        <vm:AddUserViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Create Account" FontSize="24" />
+
+        <Entry Placeholder="Name" Text="{Binding Name}" />
+        <Entry Placeholder="Email" Text="{Binding Email}" />
+        <Entry Placeholder="Phone" Text="{Binding Phone}" />
+        <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password1}" />
+        <Entry Placeholder="Confirm Password" IsPassword="True" Text="{Binding Password2}" />
+
+        <Button Text="Add User" Command="{Binding AddCommand}" />
+        <Button Text="Cancel" Command="{Binding CancelCommand}" />
+
+        <Label Text="{Binding Error}" TextColor="Red" />
+
+    </VerticalStackLayout>
+</ContentPage>

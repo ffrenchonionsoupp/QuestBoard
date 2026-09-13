@@ -1,0 +1,21 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
+             x:Class="MAUI_QuestBoard.Pages.EventDetailsPage">
+
+    <ContentPage.BindingContext>
+        <vm:EventDetailsViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+
+        <Label Text="{Binding SelectedEvent.Name}" FontSize="24" FontAttributes="Bold" />
+        <Label Text="{Binding SelectedEvent.Host}" />
+        <Label Text="{Binding SelectedEvent.Location}" />
+        <Label Text="{Binding SelectedEvent.Date}" />
+        <Label Text="{Binding SelectedEvent.Description}" />
+
+        <Button Text="RSVP" Command="{Binding RSVPCommand}" />
+
+    </VerticalStackLayout>
+</ContentPage>

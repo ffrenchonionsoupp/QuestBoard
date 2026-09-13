@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell  
+    x:Class="MAUI_QuestBoard.AppShell"  
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+    xmlns:pages="clr-namespace:MAUI_QuestBoard.Pages"  
+    Title="MAUI_QuestBoard">  
+    <ToolbarItem Text="Profile" Command="{Binding NavigateToProfileCommand}" />
+   
+    <!-- Startup Page -->  
+    <ShellContent  
+        ContentTemplate="{DataTemplate pages:LoginPage}"  
+        Route="LoginPage" />  
+    
+    <!-- Other Pages -->
+    <ShellContent  
+    ContentTemplate="{DataTemplate pages:QuestBoardPage}"  
+    Route="QuestBoardPage" />
+
+    <ShellContent  
+    ContentTemplate="{DataTemplate pages:AddUserPage}"  
+    Route="AddUserPage" />
+
+    <ShellContent  
+    ContentTemplate="{DataTemplate pages:MyAdventuresPage}"  
+    Route="MyAdventuresPage" />
+    
+    <ShellContent  
+    ContentTemplate="{DataTemplate pages:MyQuestsPage}"  
+    Route="MyQuestsPage" />
+
+    <ShellContent  
+    ContentTemplate="{DataTemplate pages:AddEventPage}"  
+    Route="AddEventPage" />
+
+    <ShellContent  
+    ContentTemplate="{DataTemplate pages:RSVPPage}"  
+    Route="RSVPPage" />
+
+</Shell>

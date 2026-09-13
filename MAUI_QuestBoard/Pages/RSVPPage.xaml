@@ -1,0 +1,24 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
+             x:Class="MAUI_QuestBoard.Pages.RSVPPage">
+
+    <ContentPage.BindingContext>
+        <vm:RSVPViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+
+        <Label Text="{Binding SelectedEvent.Name}" FontSize="20" />
+
+        <Entry Placeholder="Your Name" Text="{Binding Name}" />
+        <Entry Placeholder="Your Email" Text="{Binding Email}" />
+        <Entry Placeholder="Your Phone" Text="{Binding Phone}" />
+
+        <Button Text="Save RSVP" Command="{Binding SaveCommand}" />
+        <Button Text="Cancel" Command="{Binding CancelCommand}" />
+
+        <Label Text="{Binding Error}" TextColor="Red" />
+
+    </VerticalStackLayout>
+</ContentPage>
