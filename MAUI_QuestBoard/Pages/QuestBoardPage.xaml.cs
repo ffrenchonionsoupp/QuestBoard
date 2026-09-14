@@ -1,3 +1,6 @@
+using MAUI_QuestBoard.Models;
+using MAUI_QuestBoard.ViewModels;
+
 namespace MAUI_QuestBoard.Pages;
 
 public partial class QuestBoardPage : ContentPage
@@ -9,9 +12,10 @@ public partial class QuestBoardPage : ContentPage
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // Handle the selection change logic here
-        var selectedEvent = e.CurrentSelection.FirstOrDefault();
-        // Example: Display the selected event
-        Console.WriteLine(selectedEvent);
+        if (BindingContext is QuestBoardViewModel vm &&
+            e.CurrentSelection.FirstOrDefault() is Event selected)
+        {
+            vm.SelectEventCommand.Execute(selected);
+        }
     }
 }

@@ -10,7 +10,7 @@
 
     <VerticalStackLayout Padding="20" Spacing="15">
         <!-- These UI elements are bound to the properties in the LoginViewModel -->
-        <Entry Text="{Binding UserID}" Placeholder="Username" />
+        <Entry Text="{Binding UserId}" Placeholder="Username" />
         <Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" />
         <!-- Button to trigger the login command in the LoginViewModel -->
         <Button Text="Login" Command="{Binding LoginCommand}" />

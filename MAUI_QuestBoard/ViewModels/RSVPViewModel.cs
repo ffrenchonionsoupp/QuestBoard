@@ -24,7 +24,21 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        SelectedEvent = query["Event"] as Event;
+        if (query.TryGetValue("Event", out var eventObj) && eventObj is Event @event)
+        {
+            SelectedEvent = @event;
+        }
+        else
+        {
+            SelectedEvent = new Event
+            {
+                Host = "Unknown Host",
+                Name = "Unnamed Event",
+                Location = "Unknown Location",
+                Category = "General",
+                Description = "No description available."
+            };
+        }
 
         if (SessionService.IsLoggedIn)
         {

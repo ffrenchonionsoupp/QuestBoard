@@ -1,29 +1,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels;assembly=MAUI_QuestBoard"
-             x:Class="MAUI_QuestBoard.Pages.QuestBoardPage">
+             xmlns:models="clr-namespace:MAUI_QuestBoard.Models;assembly=MAUI_QuestBoard"
+             x:Class="MAUI_QuestBoard.Pages.QuestBoardPage"
+             x:DataType="vm:QuestBoardViewModel">
 
     <ContentPage.BindingContext>
         <vm:QuestBoardViewModel />
     </ContentPage.BindingContext>
 
-    <CollectionView ItemsSource="{Binding Events}"
-                    SelectionMode="Single"
-                    SelectedItem="{Binding SelectedEvent}"
-                    SelectionChanged="OnSelectionChanged"
-                    x:DataType="vm:QuestBoardViewModel">
+    <Grid RowDefinitions="Auto,*">
 
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <Border Padding="10" Margin="10" Stroke="DarkGreen">
-                    <VerticalStackLayout>
-                        <Label Text="{Binding Name}" FontAttributes="Bold" />
-                        <Label Text="{Binding Location}" />
-                        <Label Text="{Binding Date}" />
-                    </VerticalStackLayout>
-                </Border>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
+        <FlexLayout Grid.Row="0"
+                    Wrap="Wrap"
+                    JustifyContent="SpaceEvenly"
+                    Padding="10">
+            <Button Text="My Adventures" Command="{Binding NavigateToMyAdventuresCommand}" Margin="4" />
+            <Button Text="My Quests" Command="{Binding NavigateToMyQuestsCommand}" Margin="4" />
+            <Button Text="Add Event" Command="{Binding NavigateToAddEventCommand}" Margin="4" />
+            <Button Text="Log Out" Command="{Binding LogoutCommand}" Margin="4" />
+        </FlexLayout>
 
-    </CollectionView>
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Events}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnSelectionChanged">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Event">
+                    <Border Padding="10" Margin="10" Stroke="DarkGreen">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Location}" />
+                            <Label Text="{Binding Date}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+    </Grid>
 </ContentPage>
