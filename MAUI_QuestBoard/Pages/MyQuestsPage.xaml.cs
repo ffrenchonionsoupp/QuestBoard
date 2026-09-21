@@ -10,6 +10,13 @@ public partial class MyQuestsPage : ContentPage
         InitializeComponent();
     }
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is MyQuestsViewModel vm)
+            await vm.LoadAsync();
+    }
+
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (BindingContext is MyQuestsViewModel vm &&

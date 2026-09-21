@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
+using MAUI_QuestBoard.DataAccess;
 using MAUI_QuestBoard.Models;
 using MAUI_QuestBoard.Services;
 
@@ -6,12 +7,14 @@ namespace MAUI_QuestBoard.ViewModels;
 
 public class RSVPViewModel : BaseViewModel, IQueryAttributable
 {
-    public Event SelectedEvent { get; set; }
+    private readonly RsvpData _rsvpData = new();
 
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Phone { get; set; }
-    public string Error { get; set; }
+    public Event? SelectedEvent { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Error { get; set; } = string.Empty;
 
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
@@ -39,12 +42,19 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
                 Description = "No description available."
             };
         }
+        OnPropertyChanged(nameof(SelectedEvent));
 
         if (SessionService.IsLoggedIn)
         {
             Name = SessionService.CurrentUser.Name;
             Email = SessionService.CurrentUser.Email;
             Phone = SessionService.CurrentUser.Phone;
+        }
+        else
+        {
+            Name = string.Empty;
+            Email = string.Empty;
+            Phone = string.Empty;
         }
 
         OnPropertyChanged(nameof(Name));
@@ -61,6 +71,18 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
             Error = "All fields are required.";
             OnPropertyChanged(nameof(Error));
             return;
+        }
+
+        if (SelectedEvent is not null)
+        {
+            await _rsvpData.SaveRsvpAsync(new RSVP
+            {
+                EventId = SelectedEvent.Id,
+                UserId = SessionService.IsLoggedIn ? SessionService.CurrentUser.UserId : null,
+                Name = Name,
+                Email = Email,
+                Phone = Phone
+            });
         }
 
         await Shell.Current.GoToAsync("..");

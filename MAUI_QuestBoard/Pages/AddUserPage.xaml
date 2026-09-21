@@ -11,6 +11,7 @@
 
         <Label Text="Create Account" FontSize="24" />
 
+        <Entry Placeholder="Username" Text="{Binding UserId}" />
         <Entry Placeholder="Name" Text="{Binding Name}" />
         <Entry Placeholder="Email" Text="{Binding Email}" />
         <Entry Placeholder="Phone" Text="{Binding Phone}" />

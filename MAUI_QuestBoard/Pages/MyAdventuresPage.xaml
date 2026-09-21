@@ -7,21 +7,39 @@
         <vm:MyAdventuresViewModel />
     </ContentPage.BindingContext>
 
-    <CollectionView ItemsSource="{Binding Events}"
-                    SelectionMode="Single"
-                    SelectionChanged="OnSelectionChanged">
+    <Grid>
 
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <Frame Padding="10" Margin="10" BorderColor="DarkGreen">
-                    <VerticalStackLayout>
-                        <Label Text="{Binding Name}" FontAttributes="Bold" />
-                        <Label Text="{Binding Location}" />
-                        <Label Text="{Binding Date}" />
-                    </VerticalStackLayout>
-                </Frame>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
+        <!-- Shown only when browsing as a guest -->
+        <VerticalStackLayout IsVisible="{Binding IsGuest}"
+                              VerticalOptions="Center"
+                              Padding="30"
+                              Spacing="15">
+            <Label Text="You're browsing as a guest."
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center" />
+            <Label Text="Create an account to see the events you RSVP to here."
+                   HorizontalTextAlignment="Center" />
+            <Button Text="Create Account" Command="{Binding CreateAccountCommand}" />
+        </VerticalStackLayout>
 
-    </CollectionView>
+        <!-- Shown only when logged in -->
+        <CollectionView ItemsSource="{Binding Events}"
+                        IsVisible="{Binding IsGuest, Converter={StaticResource InvertedBoolConverter}}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnSelectionChanged">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="10" BorderColor="DarkGreen">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Location}" />
+                            <Label Text="{Binding Date}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+    </Grid>
 </ContentPage>

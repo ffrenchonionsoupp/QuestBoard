@@ -12,9 +12,11 @@
         <Entry Placeholder="Event Name" Text="{Binding Name}" />
         <Entry Placeholder="Host Name" Text="{Binding Host}" />
         <Entry Placeholder="Location" Text="{Binding Location}" />
+        <Entry Placeholder="Category" Text="{Binding Category}" />
         <Entry Placeholder="Max Attendees" Text="{Binding Max}" />
-        <Entry Placeholder="Date" Text="{Binding Date}" />
-        <Entry Placeholder="RSVP Deadline" Text="{Binding Deadline}" />
+        <Entry Placeholder="Date (e.g. 2026-10-01 6:00 PM)" Text="{Binding Date}" />
+        <Entry Placeholder="RSVP Deadline (e.g. 2026-09-28)" Text="{Binding Deadline}" />
+        <Editor Placeholder="Description" Text="{Binding Description}" HeightRequest="80" />
 
         <Button Text="Save" Command="{Binding SaveCommand}" />
         <Button Text="Cancel" Command="{Binding CancelCommand}" />

@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input; 
+using System.Windows.Input;
+using MAUI_QuestBoard.DataAccess;
 using MAUI_QuestBoard.Services;
-using MAUI_QuestBoard.ViewModels;
 using MAUI_QuestBoard.Pages;
 
 namespace MAUI_QuestBoard.ViewModels;
 
 public class LoginViewModel : BaseViewModel
 {
-    // Properties that will be bound to XAML
-    public string UserId { get; set; } = string.Empty; // Initialize to avoid nullability issues
-    public string Password { get; set; } = string.Empty; // Initialize to avoid nullability issues
-    public string Message { get; set; } = string.Empty; // Initialize to avoid nullability issues
+    private readonly UserData _userData = new();
 
-    // Commands that will be bound to buttons
+    public string UserId { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+
     public ICommand LoginCommand { get; }
     public ICommand ContinueAsGuestCommand { get; }
     public ICommand CreateAccountCommand { get; }
@@ -31,11 +26,19 @@ public class LoginViewModel : BaseViewModel
 
     private async void OnLogin()
     {
-        if (UserId == DataService.ValidUser.UserId &&
-            Password == DataService.ValidUser.Password)
+        if (string.IsNullOrWhiteSpace(UserId) || string.IsNullOrWhiteSpace(Password))
+        {
+            Message = "Enter a username and password.";
+            OnPropertyChanged(nameof(Message));
+            return;
+        }
+
+        var user = await _userData.ValidateUserAsync(UserId, Password);
+
+        if (user is not null)
         {
             SessionService.IsLoggedIn = true;
-            SessionService.CurrentUser = DataService.ValidUser;
+            SessionService.CurrentUser = user;
 
             await Shell.Current.GoToAsync("//QuestBoardPage");
         }
@@ -49,7 +52,7 @@ public class LoginViewModel : BaseViewModel
     private async void OnContinueAsGuest()
     {
         SessionService.IsLoggedIn = false;
-        SessionService.CurrentUser = DataService.GuestUser; // Use a predefined GuestUser instead of null
+        SessionService.CurrentUser = DataService.GuestUser;
 
         await Shell.Current.GoToAsync("//QuestBoardPage");
     }

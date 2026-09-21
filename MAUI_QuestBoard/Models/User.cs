@@ -1,11 +1,16 @@
-﻿namespace MAUI_QuestBoard.Models;
+using SQLite;
+
+namespace MAUI_QuestBoard.Models;
 
 public class User
 {
-    // Fixed the syntax for required properties
-    public required string UserId { get; set; }
-    public required string Password { get; set; }
-    public required string Name { get; set; }
-    public required string Email { get; set; }
-    public required string Phone { get; set; }
+    // UserId is the chosen username and doubles as the primary key,
+    // since it's already guaranteed unique by the "Add User" flow.
+    [PrimaryKey]
+    public string UserId { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
 }

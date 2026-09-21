@@ -10,6 +10,13 @@ public partial class MyAdventuresPage : ContentPage
         InitializeComponent();
     }
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is MyAdventuresViewModel vm)
+            await vm.LoadAsync();
+    }
+
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (BindingContext is MyAdventuresViewModel vm &&
