@@ -6,36 +6,17 @@
     xmlns:pages="clr-namespace:MAUI_QuestBoard.Pages"
     FlyoutBehavior="Disabled"
     Title="MAUI_QuestBoard">
-    <!--<ToolbarItem Text="Profile" Command="{Binding NavigateToProfileCommand}" />-->
 
-    <!-- Startup Page -->  
+    <!-- Startup Page -->
     <ShellContent  
         ContentTemplate="{DataTemplate pages:LoginPage}"  
-        Route="LoginPage" />  
-    
-    <!-- Other Pages -->
-    <ShellContent  
-    ContentTemplate="{DataTemplate pages:QuestBoardPage}"  
-    Route="QuestBoardPage" />
+        Route="LoginPage" />
 
-    <!--<ShellContent  
-    ContentTemplate="{DataTemplate pages:AddUserPage}"  
-    Route="AddUserPage" />
-
-    <ShellContent  
-    ContentTemplate="{DataTemplate pages:MyAdventuresPage}"  
-    Route="MyAdventuresPage" />
-    
-    <ShellContent  
-    ContentTemplate="{DataTemplate pages:MyQuestsPage}"  
-    Route="MyQuestsPage" />
-
-    <ShellContent  
-    ContentTemplate="{DataTemplate pages:AddEventPage}"  
-    Route="AddEventPage" />
-
-    <ShellContent  
-    ContentTemplate="{DataTemplate pages:RSVPPage}"  
-    Route="RSVPPage" />-->
-
+    <!-- TabBar for main navigation -->
+    <TabBar>
+        <ShellContent Route="QuestBoardPage" ContentTemplate="{DataTemplate pages:QuestBoardPage}" />
+        <ShellContent Route="MyAdventuresPage" ContentTemplate="{DataTemplate pages:MyAdventuresPage}" />
+        <ShellContent Route="MyQuestsPage" ContentTemplate="{DataTemplate pages:MyQuestsPage}" />
+        <ShellContent Route="AdminPage" ContentTemplate="{DataTemplate pages:AdminPage}" IsVisible="{Binding IsAdmin}" />
+    </TabBar>
 </Shell>

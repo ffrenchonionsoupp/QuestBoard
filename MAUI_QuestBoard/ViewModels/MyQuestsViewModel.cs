@@ -35,7 +35,7 @@ public class MyQuestsViewModel : BaseViewModel
         // Guests can't host anything that persists against an identity.
         if (IsGuest) return;
 
-        var events = await _eventData.GetEventsHostedByAsync(SessionService.CurrentUser.UserId);
+        var events = await _eventData.GetEventsHostedByAsync(SessionService.CurrentUser.Email);
         foreach (var e in events)
             Events.Add(e);
     }

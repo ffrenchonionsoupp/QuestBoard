@@ -30,41 +30,35 @@ public class EventData
                 new Event
                 {
                     Name = "Finish the Crawl",
-                    Host = "DungeonCrawlerCarl",
-                    HostUserId = "fraham5822",
-                    Location = "Floor 4",
+                    Host = "Francis Hampton",
+                    HostEmail = "fraham5822@students.ecpi.edu",
+                    Address = "123 Dungeon Way, Floor 4",
                     Date = DateTime.Now.AddDays(3),
                     RsvpDeadline = DateTime.Now.AddDays(2),
-                    Category = "Adventure",
                     MaxAttendees = 6,
-                    CurrentAttendees = 3,
-                    Description = "A beginner-friendly dungeon crawl."
+                    CurrentAttendees = 0
                 },
                 new Event
                 {
                     Name = "Wizard's Council Meetup",
-                    Host = "GaleWaterDeep",
-                    HostUserId = null,
-                    Location = "Waterdeep",
+                    Host = "Gale Waterdeep",
+                    HostEmail = null,
+                    Address = "1 Arcane Tower, Waterdeep",
                     Date = DateTime.Now.AddDays(7),
                     RsvpDeadline = DateTime.Now.AddDays(6),
-                    Category = "Magic",
                     MaxAttendees = 12,
-                    CurrentAttendees = 8,
-                    Description = "Discuss spells, scrolls, and arcane lore."
+                    CurrentAttendees = 0
                 },
                 new Event
                 {
                     Name = "Ranger's Forest Trek",
-                    Host = "LeafWalker",
-                    HostUserId = null,
-                    Location = "Emerald Forest",
+                    Host = "Leaf Walker",
+                    HostEmail = null,
+                    Address = "Trailhead, Emerald Forest",
                     Date = DateTime.Now.AddDays(10),
                     RsvpDeadline = DateTime.Now.AddDays(9),
-                    Category = "Nature",
                     MaxAttendees = 10,
-                    CurrentAttendees = 4,
-                    Description = "A scenic trek through the forest."
+                    CurrentAttendees = 0
                 }
             });
         }
@@ -82,11 +76,11 @@ public class EventData
         return await database.Table<Event>().Where(e => e.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task<List<Event>> GetEventsHostedByAsync(string userId)
+    public async Task<List<Event>> GetEventsHostedByAsync(string hostEmail)
     {
         await Init();
         return await database.Table<Event>()
-            .Where(e => e.HostUserId == userId)
+            .Where(e => e.HostEmail == hostEmail)
             .OrderBy(e => e.Date)
             .ToListAsync();
     }
@@ -96,7 +90,7 @@ public class EventData
         await Init();
         if (ev.Id != 0)
         {
-            // Update an existing event
+            // Update an existing event (used when incrementing CurrentAttendees on RSVP)
             return await database.UpdateAsync(ev);
         }
         // Save a new event

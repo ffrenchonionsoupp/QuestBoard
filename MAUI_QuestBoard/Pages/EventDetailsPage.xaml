@@ -7,15 +7,42 @@
         <vm:EventDetailsViewModel />
     </ContentPage.BindingContext>
 
-    <VerticalStackLayout Padding="20" Spacing="10">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
 
-        <Label Text="{Binding SelectedEvent.Name}" FontSize="24" FontAttributes="Bold" />
-        <Label Text="{Binding SelectedEvent.Host}" />
-        <Label Text="{Binding SelectedEvent.Location}" />
-        <Label Text="{Binding SelectedEvent.Date}" />
-        <Label Text="{Binding SelectedEvent.Description}" />
+            <Label Text="{Binding SelectedEvent.Name}" FontSize="24" FontAttributes="Bold" />
+            <Label Text="{Binding SelectedEvent.Host}" />
+            <Label Text="{Binding SelectedEvent.Address}" />
+            <Label Text="{Binding SelectedEvent.Date}" />
 
-        <Button Text="RSVP" Command="{Binding RSVPCommand}" />
+            <Label FontAttributes="Bold" Margin="0,10,0,0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Attendees: " />
+                        <Span Text="{Binding SelectedEvent.CurrentAttendees}" />
+                        <Span Text=" / " />
+                        <Span Text="{Binding SelectedEvent.MaxAttendees}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
 
-    </VerticalStackLayout>
+            <Label Text="RSVP deadline:" FontAttributes="Bold" Margin="0,10,0,0" />
+            <Label Text="{Binding SelectedEvent.RsvpDeadline}" />
+
+            <Label Text="Who's Going" FontAttributes="Bold" Margin="0,10,0,0" />
+            <CollectionView ItemsSource="{Binding AttendeeNames}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding .}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <Label Text="No one has RSVP'd yet." FontAttributes="Italic" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+
+            <Button Text="RSVP" Command="{Binding RSVPCommand}" Margin="0,15,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -20,20 +20,36 @@ public class UserData
         await SeedAsync();
     }
 
+    // admin account for visual into admin-only features (personal preferenece)
+    public const string AdminEmail = "admin@example.com";
     private async Task SeedAsync()
     {
-        var count = await database.Table<User>().CountAsync();
-        if (count == 0)
+        // Guaranteed login for grading/testing.
+        await EnsureUserAsync(new User
         {
-            // Guaranteed login for grading/testing, same account used in Week 2.
-            await database.InsertAsync(new User
-            {
-                UserId = "fraham5822",
-                Password = "Password1",
-                Name = "Francis Hampton",
-                Email = "fraham5822@students.ecpi.edu",
-                Phone = "000-1234"
-            });
+            Email = "fraham5822@students.ecpi.edu",
+            Password = "Password1",
+            Name = "Francis Hampton",
+            Phone = "000-1234"
+        });
+
+        await EnsureUserAsync(new User
+        {
+            Email = AdminEmail,
+            Password = "admin123",
+            Name = "Admin User",
+            Phone = "123-4567"
+        });
+    }
+    private async Task EnsureUserAsync(User user)
+    {
+        var existing = await database.Table<User>()
+            .Where(u => u.Email == user.Email)
+            .FirstOrDefaultAsync();
+
+        if (existing is null)
+        {
+            await database.InsertAsync(user);
         }
     }
 
@@ -43,17 +59,17 @@ public class UserData
         return await database.Table<User>().ToListAsync();
     }
 
-    public async Task<User?> GetUserAsync(string userId)
+    public async Task<User?> GetUserAsync(string email)
     {
         await Init();
-        return await database.Table<User>().Where(u => u.UserId == userId).FirstOrDefaultAsync();
+        return await database.Table<User>().Where(u => u.Email == email).FirstOrDefaultAsync();
     }
 
-    public async Task<User?> ValidateUserAsync(string userId, string password)
+    public async Task<User?> ValidateUserAsync(string email, string password)
     {
         await Init();
         return await database.Table<User>()
-            .Where(u => u.UserId == userId && u.Password == password)
+            .Where(u => u.Email == email && u.Password == password)
             .FirstOrDefaultAsync();
     }
 

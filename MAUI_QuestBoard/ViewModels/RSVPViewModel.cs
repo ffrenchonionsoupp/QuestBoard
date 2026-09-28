@@ -8,6 +8,7 @@ namespace MAUI_QuestBoard.ViewModels;
 public class RSVPViewModel : BaseViewModel, IQueryAttributable
 {
     private readonly RsvpData _rsvpData = new();
+    private readonly EventData _eventData = new();
 
     public Event? SelectedEvent { get; set; }
 
@@ -33,17 +34,12 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
         }
         else
         {
-            SelectedEvent = new Event
-            {
-                Host = "Unknown Host",
-                Name = "Unnamed Event",
-                Location = "Unknown Location",
-                Category = "General",
-                Description = "No description available."
-            };
+            SelectedEvent = new Event { Host = "Unknown Host", Name = "Unnamed Event", Address = "Unknown Address" };
         }
         OnPropertyChanged(nameof(SelectedEvent));
 
+        // Logged-in users get their profile info prefilled; guests get blank,
+        // editable fields, per the RSVP page requirements.
         if (SessionService.IsLoggedIn)
         {
             Name = SessionService.CurrentUser.Name;
@@ -64,6 +60,8 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
 
     private async void OnSave()
     {
+        if (SelectedEvent is null) return;
+
         if (string.IsNullOrWhiteSpace(Name) ||
             string.IsNullOrWhiteSpace(Email) ||
             string.IsNullOrWhiteSpace(Phone))
@@ -73,23 +71,57 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
             return;
         }
 
-        if (SelectedEvent is not null)
+        try
         {
+            // Re-fetch the event fresh from the database rather than trusting
+            // the object we navigated in with, since CurrentAttendees may have
+            // changed since this page was opened.
+            var freshEvent = await _eventData.GetEventAsync(SelectedEvent.Id) ?? SelectedEvent;
+
+            if (DateTime.Now > freshEvent.RsvpDeadline)
+            {
+                Error = "The RSVP deadline for this event has passed.";
+                OnPropertyChanged(nameof(Error));
+                return;
+            }
+
+            if (freshEvent.CurrentAttendees >= freshEvent.MaxAttendees)
+            {
+                Error = "This event has reached its maximum number of attendees.";
+                OnPropertyChanged(nameof(Error));
+                return;
+            }
+
+            if (await _rsvpData.HasRsvpedAsync(freshEvent.Id, Email))
+            {
+                Error = "You have already RSVP'd for this event.";
+                OnPropertyChanged(nameof(Error));
+                return;
+            }
+
             await _rsvpData.SaveRsvpAsync(new RSVP
             {
-                EventId = SelectedEvent.Id,
-                UserId = SessionService.IsLoggedIn ? SessionService.CurrentUser.UserId : null,
-                Name = Name,
+                EventId = freshEvent.Id,
                 Email = Email,
+                Name = Name,
                 Phone = Phone
             });
+
+            freshEvent.CurrentAttendees += 1;
+            await _eventData.SaveEventAsync(freshEvent);
+        }
+        catch (Exception ex)
+        {
+            Error = $"Could not save your RSVP: {ex.Message}";
+            OnPropertyChanged(nameof(Error));
+            return;
         }
 
-        await Shell.Current.GoToAsync("..");
+        await NavigationHelper.GoBackAsync();
     }
 
     private async void OnCancel()
     {
-        await Shell.Current.GoToAsync("..");
+        await NavigationHelper.GoBackAsync();
     }
 }

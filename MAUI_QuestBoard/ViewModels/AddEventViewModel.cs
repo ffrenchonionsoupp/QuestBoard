@@ -11,12 +11,10 @@ public class AddEventViewModel : BaseViewModel
 
     public string Name { get; set; } = string.Empty;
     public string Host { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
     public string Max { get; set; } = string.Empty;
     public string Date { get; set; } = string.Empty;
     public string Deadline { get; set; } = string.Empty;
-    public string Category { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
     public string Error { get; set; } = string.Empty;
 
     public ICommand SaveCommand { get; }
@@ -32,12 +30,10 @@ public class AddEventViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(Name) ||
             string.IsNullOrWhiteSpace(Host) ||
-            string.IsNullOrWhiteSpace(Location) ||
+            string.IsNullOrWhiteSpace(Address) ||
             string.IsNullOrWhiteSpace(Max) ||
             string.IsNullOrWhiteSpace(Date) ||
-            string.IsNullOrWhiteSpace(Deadline) ||
-            string.IsNullOrWhiteSpace(Category) ||
-            string.IsNullOrWhiteSpace(Description))
+            string.IsNullOrWhiteSpace(Deadline))
         {
             Error = "All fields are required.";
             OnPropertyChanged(nameof(Error));
@@ -69,23 +65,33 @@ public class AddEventViewModel : BaseViewModel
         {
             Name = Name,
             Host = Host,
-            HostUserId = SessionService.IsLoggedIn ? SessionService.CurrentUser.UserId : null,
-            Location = Location,
+            // Ties the event to whoever is logged in, so it shows up under
+            // "My Quests" regardless of what host name was typed above.
+            // Guests aren't real accounts, so their events aren't attributed to anyone.
+            HostEmail = SessionService.IsLoggedIn ? SessionService.CurrentUser.Email : null,
+            Address = Address,
             Date = eventDate,
             RsvpDeadline = rsvpDeadline,
-            Category = Category,
             MaxAttendees = maxAttendees,
-            CurrentAttendees = 0,
-            Description = Description
+            CurrentAttendees = 0
         };
 
-        await _eventData.SaveEventAsync(newEvent);
+        try
+        {
+            await _eventData.SaveEventAsync(newEvent);
+        }
+        catch (Exception ex)
+        {
+            Error = $"Could not save the event: {ex.Message}";
+            OnPropertyChanged(nameof(Error));
+            return;
+        }
 
-        await Shell.Current.GoToAsync("..");
+        await NavigationHelper.GoBackAsync();
     }
 
     private async void OnCancel()
     {
-        await Shell.Current.GoToAsync("..");
+        await NavigationHelper.GoBackAsync();
     }
 }

@@ -33,7 +33,7 @@
                     <Frame Padding="10" Margin="10" BorderColor="DarkGreen">
                         <VerticalStackLayout>
                             <Label Text="{Binding Name}" FontAttributes="Bold" />
-                            <Label Text="{Binding Location}" />
+                            <Label Text="{Binding Address}" />
                             <Label Text="{Binding Date}" />
                             <Label Text="Hosted Event" TextColor="Goldenrod" />
                         </VerticalStackLayout>

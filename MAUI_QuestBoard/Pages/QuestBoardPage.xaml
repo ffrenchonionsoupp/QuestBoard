@@ -3,7 +3,7 @@
              xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels;assembly=MAUI_QuestBoard"
              xmlns:models="clr-namespace:MAUI_QuestBoard.Models;assembly=MAUI_QuestBoard"
              x:Class="MAUI_QuestBoard.Pages.QuestBoardPage"
-             x:DataType="{x:Type vm:QuestBoardViewModel}">
+             x:DataType="vm:QuestBoardViewModel">
 
     <ContentPage.BindingContext>
         <vm:QuestBoardViewModel />
@@ -31,7 +31,7 @@
                     <Border Padding="10" Margin="10" Stroke="DarkGreen">
                         <VerticalStackLayout>
                             <Label Text="{Binding Name}" FontAttributes="Bold" />
-                            <Label Text="{Binding Location}" />
+                            <Label Text="{Binding Address}" />
                             <Label Text="{Binding Date}" />
                         </VerticalStackLayout>
                     </Border>

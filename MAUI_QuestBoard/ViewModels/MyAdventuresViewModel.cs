@@ -37,7 +37,7 @@ public class MyAdventuresViewModel : BaseViewModel
         // is saved against an identity - there's nothing to show them here.
         if (IsGuest) return;
 
-        var rsvps = await _rsvpData.GetRsvpsForUserAsync(SessionService.CurrentUser.UserId);
+        var rsvps = await _rsvpData.GetRsvpsForUserAsync(SessionService.CurrentUser.Email);
         var eventIds = rsvps.Select(r => r.EventId).Distinct().ToHashSet();
 
         var allEvents = await _eventData.GetEventsAsync();

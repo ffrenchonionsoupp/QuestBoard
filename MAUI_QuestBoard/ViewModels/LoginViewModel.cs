@@ -8,8 +8,9 @@ namespace MAUI_QuestBoard.ViewModels;
 public class LoginViewModel : BaseViewModel
 {
     private readonly UserData _userData = new();
+    private readonly AuthWebService _authWebService = new();
 
-    public string UserId { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
 
@@ -26,26 +27,45 @@ public class LoginViewModel : BaseViewModel
 
     private async void OnLogin()
     {
-        if (string.IsNullOrWhiteSpace(UserId) || string.IsNullOrWhiteSpace(Password))
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            Message = "Enter a username and password.";
+            Message = "Enter your email and password.";
             OnPropertyChanged(nameof(Message));
             return;
         }
 
-        var user = await _userData.ValidateUserAsync(UserId, Password);
+        // Validate user credentials in the local database
+        var user = await _userData.ValidateUserAsync(Email, Password);
 
-        if (user is not null)
-        {
-            SessionService.IsLoggedIn = true;
-            SessionService.CurrentUser = user;
-
-            await Shell.Current.GoToAsync("//QuestBoardPage");
-        }
-        else
+        if (user is null)
         {
             Message = "Login failed.";
             OnPropertyChanged(nameof(Message));
+            return;
+        }
+
+        // Verify credentials with the authentication service
+        var verified = await _authWebService.AuthenticateAsync(Email, Password);
+
+        if (!verified)
+        {
+            Message = "Could not verify credentials with the authentication service. Make sure it's running.";
+            OnPropertyChanged(nameof(Message));
+            return;
+        }
+
+        // Set the session for the logged-in user
+        SessionService.IsLoggedIn = true;
+        SessionService.CurrentUser = user;
+
+        // Redirect based on user role
+        if (SessionService.IsAdmin)
+        {
+            await Shell.Current.GoToAsync("//AdminPage");
+        }
+        else
+        {
+            await Shell.Current.GoToAsync("//QuestBoardPage");
         }
     }
 
