@@ -13,8 +13,7 @@
         ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="LoginPage" />
 
-    <!-- Main navigation. These three pages are tabs, so they are NOT also
-         registered with Routing.RegisterRoute in AppShell.xaml.cs. -->
+    <!-- Main navigation. -->
     <TabBar>
         <ShellContent Title="Quest Board" Route="QuestBoardPage" ContentTemplate="{DataTemplate pages:QuestBoardPage}" />
         <ShellContent Title="My Adventures" Route="MyAdventuresPage" ContentTemplate="{DataTemplate pages:MyAdventuresPage}" />

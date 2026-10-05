@@ -14,9 +14,7 @@ public partial class AdminPage : ContentPage
     {
         base.OnAppearing();
 
-        // Safety net: the Admin tab is hidden for everyone except the
-        // administrator, but never show this list to anyone else even if
-        // the page is reached some other way.
+        // Safety net: the Admin tab is hidden for everyone except the administrator
         if (!SessionService.IsAdmin)
         {
             await Shell.Current.GoToAsync("//QuestBoardPage");

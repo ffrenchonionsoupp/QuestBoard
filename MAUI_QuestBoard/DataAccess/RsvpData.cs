@@ -31,9 +31,8 @@ public class RsvpData
         return await database.Table<RSVP>().Where(r => r.EventId == eventId).ToListAsync();
     }
 
-    // Used to enforce "prevent an individual from submitting multiple
-    // RSVP requests for the same event" - checked by Email since that's
-    // the only identity guests have too.
+    // Used to prevent an individual from submitting multiple
+    // RSVP requests for the same event
     public async Task<bool> HasRsvpedAsync(int eventId, string email)
     {
         await Init();

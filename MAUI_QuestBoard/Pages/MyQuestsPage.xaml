@@ -41,7 +41,6 @@
                             <Label Text="{Binding Address}" />
                             <Label Text="{Binding Date}" />
 
-                            <!-- Highlight badge: Tavern Gold fill with Warm Brown text -->
                             <Border Style="{StaticResource BadgeBorder}" Margin="0,6,0,0">
                                 <Label Text="Hosted Event" Style="{StaticResource BadgeLabel}" />
                             </Border>

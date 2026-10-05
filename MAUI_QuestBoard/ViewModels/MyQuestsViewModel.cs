@@ -13,7 +13,7 @@ public class MyQuestsViewModel : BaseViewModel
 
     public ObservableCollection<Event> Events { get; } = new();
 
-    // True while browsing as a guest - drives the "create an account" message.
+    // True while browsing as a guest drives the "create an account" message.
     public bool IsGuest { get; private set; }
 
     public ICommand SelectEventCommand { get; }

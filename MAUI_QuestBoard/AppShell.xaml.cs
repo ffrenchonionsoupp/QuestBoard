@@ -10,9 +10,7 @@ namespace MAUI_QuestBoard
 
             // Only pages that are reached by pushing (GoToAsync) are registered
             // here. LoginPage, QuestBoardPage, MyAdventuresPage and MyQuestsPage
-            // are declared as <ShellContent> in AppShell.xaml, which already
-            // gives them routes - registering those again as well makes the
-            // route ambiguous.
+            // are declared as <ShellContent> in AppShell.xaml
             Routing.RegisterRoute(nameof(AddUserPage), typeof(AddUserPage));
             Routing.RegisterRoute(nameof(AddEventPage), typeof(AddEventPage));
             Routing.RegisterRoute(nameof(EventDetailsPage), typeof(EventDetailsPage));

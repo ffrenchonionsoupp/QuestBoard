@@ -34,7 +34,7 @@ public class MyAdventuresViewModel : BaseViewModel
         OnPropertyChanged(nameof(IsGuest));
 
         // Guests haven't RSVP'd under a real account, and nothing of theirs
-        // is saved against an identity - there's nothing to show them here.
+        // is saved against an identity 
         if (IsGuest) return;
 
         var rsvps = await _rsvpData.GetRsvpsForUserAsync(SessionService.CurrentUser.Email);

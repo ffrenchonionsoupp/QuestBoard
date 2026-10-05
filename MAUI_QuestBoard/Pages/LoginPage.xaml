@@ -16,7 +16,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <!-- Application logo: Cinzel Bold -->
             <Label Text="QuestBoard" Style="{StaticResource LogoLabel}" Margin="0,24,0,0" />
 
             <Border Padding="18">

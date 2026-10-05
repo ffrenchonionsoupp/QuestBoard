@@ -18,7 +18,7 @@
             <Border Padding="18">
                 <VerticalStackLayout Spacing="8">
 
-                    <!-- Event titles: Cinzel -->
+                    
                     <Label Text="{Binding SelectedEvent.Name}" Style="{StaticResource EventTitle}" FontSize="26" />
                     <Label Text="{Binding SelectedEvent.Host}" />
                     <Label Text="{Binding SelectedEvent.Address}" />

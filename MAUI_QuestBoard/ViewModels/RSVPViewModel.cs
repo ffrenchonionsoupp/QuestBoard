@@ -47,8 +47,7 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
         }
         OnPropertyChanged(nameof(SelectedEvent));
 
-        // Logged-in users get their profile info prefilled; guests get blank,
-        // editable fields, per the RSVP page requirements.
+        // Logged-in users get their profile info prefilled; guests get blank
         if (SessionService.IsLoggedIn)
         {
             Name = SessionService.CurrentUser.Name;
@@ -104,9 +103,6 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
 
         try
         {
-            // Re-fetch the event fresh from the database rather than trusting
-            // the object we navigated in with, since CurrentAttendees may have
-            // changed since this page was opened.
             var freshEvent = await _eventData.GetEventAsync(SelectedEvent.Id) ?? SelectedEvent;
             eventName = freshEvent.Name;
 

@@ -31,9 +31,6 @@ public class LoginViewModel : BaseViewModel
         OnPropertyChanged(nameof(Message));
     }
 
-    // The login page stays alive in the background after you sign in, so
-    // wipe what was typed - otherwise the next person to log out lands on a
-    // login screen with the previous email and password still filled in.
     private void ClearForm()
     {
         Email = string.Empty;

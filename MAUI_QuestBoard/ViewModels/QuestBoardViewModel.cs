@@ -20,7 +20,7 @@ public class QuestBoardViewModel : BaseViewModel
     public ICommand NavigateToAdminCommand { get; }
     public ICommand LogoutCommand { get; }
 
-    // Drives whether the Admin button is shown - only the administrator sees it.
+    // Drives whether the Admin button is shown only the administrator sees it.
     public bool IsAdmin { get; private set; }
 
     public QuestBoardViewModel()
@@ -51,8 +51,7 @@ public class QuestBoardViewModel : BaseViewModel
             new Dictionary<string, object> { { "Event", evt } });
     }
 
-    // My Adventures and My Quests are tabs, so these switch tabs with an
-    // absolute route ("//") rather than pushing a second copy of the page.
+    // My Adventures and My Quests are tabs, so these switch tabs with an absolute route 
     private async void OnNavigateToMyAdventures()
     {
         await Shell.Current.GoToAsync("//MyAdventuresPage");

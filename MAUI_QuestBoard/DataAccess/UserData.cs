@@ -58,8 +58,7 @@ public class UserData
         }
         else if (existing.Role != user.Role)
         {
-            // An account saved before roles existed has no role - bring the
-            // seeded accounts up to date so the admin is actually an admin.
+            // An account saved before roles existed has no role 
             existing.Role = user.Role;
             await database.UpdateAsync(existing);
         }

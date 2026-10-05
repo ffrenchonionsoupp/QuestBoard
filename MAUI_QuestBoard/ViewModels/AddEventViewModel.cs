@@ -47,7 +47,7 @@ public class AddEventViewModel : BaseViewModel
     private async void OnSave()
     {
         // Collect every problem so the person can fix them all in one pass.
-        // Nothing the person typed is cleared - the fields keep their values.
+        // Nothing the person typed is cleared
         var problems = new List<string>();
 
         var missing = new List<string>();

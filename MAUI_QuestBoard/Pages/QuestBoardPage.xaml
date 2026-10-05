@@ -36,7 +36,6 @@
                 <DataTemplate x:DataType="models:Event">
                     <Border Padding="14" Margin="10,6">
                         <VerticalStackLayout Spacing="2">
-                            <!-- Event titles: Cinzel -->
                             <Label Text="{Binding Name}" Style="{StaticResource EventTitle}" />
                             <Label Text="{Binding Address}" />
                             <Label Text="{Binding Date}" />
