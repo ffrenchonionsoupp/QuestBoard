@@ -15,6 +15,7 @@ public class EventData
         }
 
         database = new SQLiteAsyncConnection(DatabaseConstants.DatabasePath, DatabaseConstants.Flags);
+        DatabaseDiagnostics.RecordConnection(nameof(EventData));
         await database.CreateTableAsync<Event>();
 
         await SeedAsync();

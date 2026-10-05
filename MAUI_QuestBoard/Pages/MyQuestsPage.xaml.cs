@@ -24,5 +24,9 @@ public partial class MyQuestsPage : ContentPage
         {
             vm.SelectEventCommand.Execute(selected);
         }
+
+        // Clear the highlight so the same event can be opened again later.
+        if (sender is CollectionView collectionView)
+            collectionView.SelectedItem = null;
     }
 }

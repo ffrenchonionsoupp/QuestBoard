@@ -25,54 +25,88 @@ public class LoginViewModel : BaseViewModel
         CreateAccountCommand = new Command(OnCreateAccount);
     }
 
+    private void ShowMessage(string message)
+    {
+        Message = message;
+        OnPropertyChanged(nameof(Message));
+    }
+
+    // The login page stays alive in the background after you sign in, so
+    // wipe what was typed - otherwise the next person to log out lands on a
+    // login screen with the previous email and password still filled in.
+    private void ClearForm()
+    {
+        Email = string.Empty;
+        Password = string.Empty;
+        Message = string.Empty;
+        OnPropertyChanged(nameof(Email));
+        OnPropertyChanged(nameof(Password));
+        OnPropertyChanged(nameof(Message));
+    }
+
     private async void OnLogin()
     {
-        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+        var email = (Email ?? string.Empty).Trim();
+        var password = Password ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(email) && string.IsNullOrWhiteSpace(password))
         {
-            Message = "Enter your email and password.";
-            OnPropertyChanged(nameof(Message));
+            ShowMessage("Enter your email and password.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            ShowMessage("Enter your email address.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            ShowMessage("Enter your password.");
             return;
         }
 
         // Validate user credentials in the local database
-        var user = await _userData.ValidateUserAsync(Email, Password);
+        var user = await _userData.ValidateUserAsync(email, password);
 
         if (user is null)
         {
-            Message = "Login failed.";
-            OnPropertyChanged(nameof(Message));
+            // Deliberately doesn't say whether the email or the password was wrong.
+            ShowMessage("Login failed.");
             return;
         }
 
-        // Verify credentials with the authentication service
-        var verified = await _authWebService.AuthenticateAsync(Email, Password);
+        // Verify credentials with the authentication service (Basic Authentication)
+        var verified = await _authWebService.AuthenticateAsync(email, password);
 
         if (!verified)
         {
-            Message = "Could not verify credentials with the authentication service. Make sure it's running.";
-            OnPropertyChanged(nameof(Message));
+            ShowMessage("Could not verify credentials with the authentication service. Make sure it's running.");
             return;
         }
 
-        // Set the session for the logged-in user
-        SessionService.IsLoggedIn = true;
-        SessionService.CurrentUser = user;
+        SessionService.SignIn(user);
+        ClearForm();
 
-        // Redirect based on user role
+        // Upon login, show the events the user is signed up to attend
+        // (the administrator goes to the admin page instead).
         if (SessionService.IsAdmin)
         {
-            await Shell.Current.GoToAsync("//AdminPage");
+            // Admin is a pushed page, so go to the board first and push it on top.
+            await Shell.Current.GoToAsync("//QuestBoardPage");
+            await Shell.Current.GoToAsync(nameof(AdminPage));
         }
         else
         {
-            await Shell.Current.GoToAsync("//QuestBoardPage");
+            await Shell.Current.GoToAsync("//MyAdventuresPage");
         }
     }
 
     private async void OnContinueAsGuest()
     {
-        SessionService.IsLoggedIn = false;
-        SessionService.CurrentUser = DataService.GuestUser;
+        SessionService.SignOut();
+        ClearForm();
 
         await Shell.Current.GoToAsync("//QuestBoardPage");
     }

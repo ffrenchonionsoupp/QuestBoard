@@ -10,6 +10,7 @@ public class User
     public string Name { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
 
-    // New property to define the user's role
-    public string Role { get; set; } = "Guest"; // Default role is Guest
+    // "User" for normal registered accounts, "Admin" for the administrator.
+    // (The in-memory guest placeholder uses "Guest" - guests are never saved.)
+    public string Role { get; set; } = "User";
 }

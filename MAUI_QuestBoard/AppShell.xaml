@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell  
-    x:Class="MAUI_QuestBoard.AppShell"  
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+<Shell
+    x:Class="MAUI_QuestBoard.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:MAUI_QuestBoard.Pages"
     FlyoutBehavior="Disabled"
     Title="MAUI_QuestBoard">
 
     <!-- Startup Page -->
-    <ShellContent  
-        ContentTemplate="{DataTemplate pages:LoginPage}"  
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
         Route="LoginPage" />
 
-    <!-- TabBar for main navigation -->
+    <!-- Main navigation. These three pages are tabs, so they are NOT also
+         registered with Routing.RegisterRoute in AppShell.xaml.cs. -->
     <TabBar>
-        <ShellContent Route="QuestBoardPage" ContentTemplate="{DataTemplate pages:QuestBoardPage}" />
-        <ShellContent Route="MyAdventuresPage" ContentTemplate="{DataTemplate pages:MyAdventuresPage}" />
-        <ShellContent Route="MyQuestsPage" ContentTemplate="{DataTemplate pages:MyQuestsPage}" />
-        <ShellContent Route="AdminPage" ContentTemplate="{DataTemplate pages:AdminPage}" IsVisible="{Binding IsAdmin}" />
+        <ShellContent Title="Quest Board" Route="QuestBoardPage" ContentTemplate="{DataTemplate pages:QuestBoardPage}" />
+        <ShellContent Title="My Adventures" Route="MyAdventuresPage" ContentTemplate="{DataTemplate pages:MyAdventuresPage}" />
+        <ShellContent Title="My Quests" Route="MyQuestsPage" ContentTemplate="{DataTemplate pages:MyQuestsPage}" />
     </TabBar>
 </Shell>

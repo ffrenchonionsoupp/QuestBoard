@@ -1,25 +1,47 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
-             x:Class="MAUI_QuestBoard.Pages.AddEventPage">
+             x:Class="MAUI_QuestBoard.Pages.AddEventPage"
+             Title="Add Event">
 
     <ContentPage.BindingContext>
         <vm:AddEventViewModel />
     </ContentPage.BindingContext>
 
-    <VerticalStackLayout Padding="20" Spacing="10">
+    <Shell.TitleView>
+        <Label Text="Add Event" Style="{StaticResource NavTitle}" />
+    </Shell.TitleView>
 
-        <Entry Placeholder="Event Name" Text="{Binding Name}" />
-        <Entry Placeholder="Host Name" Text="{Binding Host}" />
-        <Entry Placeholder="Event Address" Text="{Binding Address}" />
-        <Entry Placeholder="Max Attendees" Text="{Binding Max}" />
-        <Entry Placeholder="Date (e.g. 2026-10-01 6:00 PM)" Text="{Binding Date}" />
-        <Entry Placeholder="RSVP Deadline (e.g. 2026-09-28)" Text="{Binding Deadline}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Border Padding="18">
+                <VerticalStackLayout Spacing="10">
 
-        <Button Text="Save" Command="{Binding SaveCommand}" />
-        <Button Text="Cancel" Command="{Binding CancelCommand}" />
+                    <Entry Placeholder="Event Name" Text="{Binding Name}" />
+                    <Entry Placeholder="Host Name" Text="{Binding Host}" />
+                    <Entry Placeholder="Event Address" Text="{Binding Address}" />
+                    <Entry Placeholder="Max Attendees" Text="{Binding Max}" Keyboard="Numeric" />
 
-        <Label Text="{Binding Error}" TextColor="Red" />
+                    <Label Text="Event Date and Time" Style="{StaticResource BoldLabel}" Margin="0,10,0,0" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <DatePicker Grid.Column="0" Date="{Binding EventDate}" MinimumDate="{Binding MinEventDate}" />
+                        <TimePicker Grid.Column="1" Time="{Binding EventTime}" />
+                    </Grid>
 
-    </VerticalStackLayout>
+                    <Label Text="RSVP Deadline (Date and Time)" Style="{StaticResource BoldLabel}" Margin="0,10,0,0" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <DatePicker Grid.Column="0" Date="{Binding DeadlineDate}" />
+                        <TimePicker Grid.Column="1" Time="{Binding DeadlineTime}" />
+                    </Grid>
+
+                    <!-- Sits above the buttons so it is always on screen when it appears -->
+                    <Label Text="{Binding Error}" IsVisible="{Binding HasError}" Style="{StaticResource ErrorLabel}" />
+
+                    <Button Text="Save" Command="{Binding SaveCommand}" />
+                    <Button Text="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SecondaryButton}" />
+
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

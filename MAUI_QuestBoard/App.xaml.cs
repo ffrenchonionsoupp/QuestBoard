@@ -1,10 +1,15 @@
-﻿namespace MAUI_QuestBoard
+namespace MAUI_QuestBoard
 {
     public partial class App : Application
     {
         public App()
         {
             InitializeComponent();
+
+            // The QuestBoard palette is a light, parchment-based design, so stay
+            // light even when Windows is in dark mode (otherwise native controls
+            // and default text switch to dark-mode colors on a parchment page).
+            UserAppTheme = Microsoft.Maui.ApplicationModel.AppTheme.Light;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

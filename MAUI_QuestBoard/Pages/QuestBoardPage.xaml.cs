@@ -24,5 +24,10 @@ public partial class QuestBoardPage : ContentPage
         {
             vm.SelectEventCommand.Execute(selected);
         }
+
+        // Clear the highlight, otherwise tapping the same event again after
+        // coming back does nothing (the selection never "changes").
+        if (sender is CollectionView collectionView)
+            collectionView.SelectedItem = null;
     }
 }

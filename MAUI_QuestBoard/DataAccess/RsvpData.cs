@@ -15,6 +15,7 @@ public class RsvpData
         }
 
         database = new SQLiteAsyncConnection(DatabaseConstants.DatabasePath, DatabaseConstants.Flags);
+        DatabaseDiagnostics.RecordConnection(nameof(RsvpData));
         await database.CreateTableAsync<RSVP>();
     }
 

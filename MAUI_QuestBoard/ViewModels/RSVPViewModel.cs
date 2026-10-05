@@ -17,6 +17,8 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
     public string Phone { get; set; } = string.Empty;
     public string Error { get; set; } = string.Empty;
 
+    public bool HasError => !string.IsNullOrEmpty(Error);
+
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
 
@@ -24,6 +26,13 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
     {
         SaveCommand = new Command(OnSave);
         CancelCommand = new Command(OnCancel);
+    }
+
+    private void SetError(string message)
+    {
+        Error = message;
+        OnPropertyChanged(nameof(Error));
+        OnPropertyChanged(nameof(HasError));
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -53,6 +62,7 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
             Phone = string.Empty;
         }
 
+        SetError(string.Empty);
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Email));
         OnPropertyChanged(nameof(Phone));
@@ -62,14 +72,35 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
     {
         if (SelectedEvent is null) return;
 
-        if (string.IsNullOrWhiteSpace(Name) ||
-            string.IsNullOrWhiteSpace(Email) ||
-            string.IsNullOrWhiteSpace(Phone))
+        var problems = new List<string>();
+
+        var missing = new List<string>();
+        if (string.IsNullOrWhiteSpace(Name)) missing.Add("Name");
+        if (string.IsNullOrWhiteSpace(Email)) missing.Add("Email");
+        if (string.IsNullOrWhiteSpace(Phone)) missing.Add("Phone");
+        if (missing.Count > 0)
         {
-            Error = "All fields are required.";
-            OnPropertyChanged(nameof(Error));
+            problems.Add($"Please fill in: {string.Join(", ", missing)}.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(Email) && !ValidationHelper.IsValidEmail(Email))
+        {
+            problems.Add("Enter a valid email address (for example, name@example.com).");
+        }
+
+        if (!string.IsNullOrWhiteSpace(Phone) && !ValidationHelper.IsValidPhone(Phone))
+        {
+            problems.Add("Phone number can only contain digits, spaces, dashes, dots, parentheses and +, with at least 7 digits.");
+        }
+
+        if (problems.Count > 0)
+        {
+            SetError(string.Join(Environment.NewLine, problems));
             return;
         }
+
+        var email = Email.Trim();
+        var eventName = SelectedEvent.Name;
 
         try
         {
@@ -77,34 +108,32 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
             // the object we navigated in with, since CurrentAttendees may have
             // changed since this page was opened.
             var freshEvent = await _eventData.GetEventAsync(SelectedEvent.Id) ?? SelectedEvent;
+            eventName = freshEvent.Name;
 
             if (DateTime.Now > freshEvent.RsvpDeadline)
             {
-                Error = "The RSVP deadline for this event has passed.";
-                OnPropertyChanged(nameof(Error));
+                SetError("The RSVP deadline for this event has passed.");
                 return;
             }
 
             if (freshEvent.CurrentAttendees >= freshEvent.MaxAttendees)
             {
-                Error = "This event has reached its maximum number of attendees.";
-                OnPropertyChanged(nameof(Error));
+                SetError("This event has reached its maximum number of attendees.");
                 return;
             }
 
-            if (await _rsvpData.HasRsvpedAsync(freshEvent.Id, Email))
+            if (await _rsvpData.HasRsvpedAsync(freshEvent.Id, email))
             {
-                Error = "You have already RSVP'd for this event.";
-                OnPropertyChanged(nameof(Error));
+                SetError("You have already RSVP'd for this event.");
                 return;
             }
 
             await _rsvpData.SaveRsvpAsync(new RSVP
             {
                 EventId = freshEvent.Id,
-                Email = Email,
-                Name = Name,
-                Phone = Phone
+                Email = email,
+                Name = Name.Trim(),
+                Phone = Phone.Trim()
             });
 
             freshEvent.CurrentAttendees += 1;
@@ -112,11 +141,12 @@ public class RSVPViewModel : BaseViewModel, IQueryAttributable
         }
         catch (Exception ex)
         {
-            Error = $"Could not save your RSVP: {ex.Message}";
-            OnPropertyChanged(nameof(Error));
+            SetError($"Could not save your RSVP: {ex.Message}");
             return;
         }
 
+        SetError(string.Empty);
+        await Shell.Current.DisplayAlert("RSVP confirmed", $"You're signed up for {eventName}.", "OK");
         await NavigationHelper.GoBackAsync();
     }
 

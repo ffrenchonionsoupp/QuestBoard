@@ -3,11 +3,16 @@
              xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels;assembly=MAUI_QuestBoard"
              xmlns:models="clr-namespace:MAUI_QuestBoard.Models;assembly=MAUI_QuestBoard"
              x:Class="MAUI_QuestBoard.Pages.QuestBoardPage"
-             x:DataType="vm:QuestBoardViewModel">
+             x:DataType="vm:QuestBoardViewModel"
+             Title="Quest Board">
 
     <ContentPage.BindingContext>
         <vm:QuestBoardViewModel />
     </ContentPage.BindingContext>
+
+    <Shell.TitleView>
+        <Label Text="Quest Board" Style="{StaticResource NavTitle}" />
+    </Shell.TitleView>
 
     <Grid RowDefinitions="Auto,*">
 
@@ -15,10 +20,11 @@
                     Wrap="Wrap"
                     JustifyContent="SpaceEvenly"
                     Padding="10">
-            <Button Text="My Adventures" Command="{Binding NavigateToMyAdventuresCommand}" Margin="4" />
-            <Button Text="My Quests" Command="{Binding NavigateToMyQuestsCommand}" Margin="4" />
+            <Button Text="My Adventures" Command="{Binding NavigateToMyAdventuresCommand}" Style="{StaticResource SecondaryButton}" Margin="4" />
+            <Button Text="My Quests" Command="{Binding NavigateToMyQuestsCommand}" Style="{StaticResource SecondaryButton}" Margin="4" />
             <Button Text="Add Event" Command="{Binding NavigateToAddEventCommand}" Margin="4" />
-            <Button Text="Log Out" Command="{Binding LogoutCommand}" Margin="4" />
+            <Button Text="Admin" Command="{Binding NavigateToAdminCommand}" IsVisible="{Binding IsAdmin}" Style="{StaticResource SecondaryButton}" Margin="4" />
+            <Button Text="Log Out" Command="{Binding LogoutCommand}" Style="{StaticResource SecondaryButton}" Margin="4" />
         </FlexLayout>
 
         <CollectionView Grid.Row="1"
@@ -28,9 +34,10 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Event">
-                    <Border Padding="10" Margin="10" Stroke="DarkGreen">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                    <Border Padding="14" Margin="10,6">
+                        <VerticalStackLayout Spacing="2">
+                            <!-- Event titles: Cinzel -->
+                            <Label Text="{Binding Name}" Style="{StaticResource EventTitle}" />
                             <Label Text="{Binding Address}" />
                             <Label Text="{Binding Date}" />
                         </VerticalStackLayout>

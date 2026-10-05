@@ -1,26 +1,36 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
-             x:Class="MAUI_QuestBoard.Pages.AddUserPage">
+             x:Class="MAUI_QuestBoard.Pages.AddUserPage"
+             Title="Create Account">
 
     <ContentPage.BindingContext>
         <vm:AddUserViewModel />
     </ContentPage.BindingContext>
 
-    <VerticalStackLayout Padding="20" Spacing="15">
+    <Shell.TitleView>
+        <Label Text="Create Account" Style="{StaticResource NavTitle}" />
+    </Shell.TitleView>
 
-        <Label Text="Create Account" FontSize="24" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Border Padding="18">
+                <VerticalStackLayout Spacing="12">
 
-        <Entry Placeholder="Name" Text="{Binding Name}" />
-        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
-        <Entry Placeholder="Phone" Text="{Binding Phone}" />
-        <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password1}" />
-        <Entry Placeholder="Confirm Password" IsPassword="True" Text="{Binding Password2}" />
+                    <Entry Placeholder="Name" Text="{Binding Name}" />
+                    <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+                    <Entry Placeholder="Phone" Text="{Binding Phone}" Keyboard="Telephone" />
+                    <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password1}" />
+                    <Entry Placeholder="Confirm Password" IsPassword="True" Text="{Binding Password2}" />
 
-        <Button Text="Add User" Command="{Binding AddCommand}" />
-        <Button Text="Cancel" Command="{Binding CancelCommand}" />
+                    <!-- Sits above the buttons so it is always on screen when it appears -->
+                    <Label Text="{Binding Error}" IsVisible="{Binding HasError}" Style="{StaticResource ErrorLabel}" />
 
-        <Label Text="{Binding Error}" TextColor="Red" />
+                    <Button Text="Add User" Command="{Binding AddCommand}" />
+                    <Button Text="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource SecondaryButton}" />
 
-    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

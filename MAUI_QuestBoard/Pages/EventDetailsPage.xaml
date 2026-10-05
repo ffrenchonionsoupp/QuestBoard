@@ -1,47 +1,59 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MAUI_QuestBoard.ViewModels"
-             x:Class="MAUI_QuestBoard.Pages.EventDetailsPage">
+             x:Class="MAUI_QuestBoard.Pages.EventDetailsPage"
+             Title="Event Details">
 
     <ContentPage.BindingContext>
         <vm:EventDetailsViewModel />
     </ContentPage.BindingContext>
 
+    <Shell.TitleView>
+        <Label Text="Event Details" Style="{StaticResource NavTitle}" />
+    </Shell.TitleView>
+
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
+        <VerticalStackLayout Padding="20" Spacing="12">
 
-            <Label Text="{Binding SelectedEvent.Name}" FontSize="24" FontAttributes="Bold" />
-            <Label Text="{Binding SelectedEvent.Host}" />
-            <Label Text="{Binding SelectedEvent.Address}" />
-            <Label Text="{Binding SelectedEvent.Date}" />
+            <Border Padding="18">
+                <VerticalStackLayout Spacing="8">
 
-            <Label FontAttributes="Bold" Margin="0,10,0,0">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Attendees: " />
-                        <Span Text="{Binding SelectedEvent.CurrentAttendees}" />
-                        <Span Text=" / " />
-                        <Span Text="{Binding SelectedEvent.MaxAttendees}" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                    <!-- Event titles: Cinzel -->
+                    <Label Text="{Binding SelectedEvent.Name}" Style="{StaticResource EventTitle}" FontSize="26" />
+                    <Label Text="{Binding SelectedEvent.Host}" />
+                    <Label Text="{Binding SelectedEvent.Address}" />
+                    <Label Text="{Binding SelectedEvent.Date}" />
 
-            <Label Text="RSVP deadline:" FontAttributes="Bold" Margin="0,10,0,0" />
-            <Label Text="{Binding SelectedEvent.RsvpDeadline}" />
+                    <Label Style="{StaticResource BoldLabel}" Margin="0,10,0,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Attendees: " />
+                                <Span Text="{Binding SelectedEvent.CurrentAttendees}" />
+                                <Span Text=" / " />
+                                <Span Text="{Binding SelectedEvent.MaxAttendees}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-            <Label Text="Who's Going" FontAttributes="Bold" Margin="0,10,0,0" />
-            <CollectionView ItemsSource="{Binding AttendeeNames}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding .}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                <CollectionView.EmptyView>
-                    <Label Text="No one has RSVP'd yet." FontAttributes="Italic" />
-                </CollectionView.EmptyView>
-            </CollectionView>
+                    <Label Text="RSVP deadline:" Style="{StaticResource SectionHeading}" />
+                    <Label Text="{Binding SelectedEvent.RsvpDeadline}" />
 
-            <Button Text="RSVP" Command="{Binding RSVPCommand}" Margin="0,15,0,0" />
+                    <Label Text="Who's Going" Style="{StaticResource SectionHeading}" />
+                    <CollectionView ItemsSource="{Binding AttendeeNames}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding .}" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <Label Text="No one has RSVP'd yet." FontAttributes="Italic" />
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="RSVP" Command="{Binding RSVPCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>
